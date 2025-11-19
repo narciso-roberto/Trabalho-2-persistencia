@@ -1,5 +1,5 @@
 meu_banco.db
-# Python-generated files
+# Python-generated files.
 __pycache__/
 *.py[oc]
 build/
@@ -8,6 +8,6 @@ wheels/
 *.egg-info
 src/database/delta_*/
 src/@IDseq/*
-# Virtual environments
+# Virtual environments.
 .venv
 *.pyc
