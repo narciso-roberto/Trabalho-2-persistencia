@@ -23,7 +23,7 @@ def cadastrarProduto(novoProduto: ProdutoDTO):
 def cadastrarProduto():
     with Session(engine) as session:
         try:
-            print("deletar produto.")
+            print("deletar produto..........")
         except Exception as e:
             session.rollback()
             return(f"Error: {e}")
