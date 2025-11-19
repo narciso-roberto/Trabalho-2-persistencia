@@ -6,3 +6,5 @@ class Fornecedor(SQLModel, table=True):
     nome: str
     contato: str
     endereco: str
+
+Fornecedor.model_rebuild()

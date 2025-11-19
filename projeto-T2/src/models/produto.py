@@ -8,7 +8,7 @@ class Produto(SQLModel, table=True):
     quantidade: int
     categoria: str
 
-
+Produto.model_rebuild()
 
 
 

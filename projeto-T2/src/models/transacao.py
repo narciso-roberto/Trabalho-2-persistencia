@@ -6,3 +6,5 @@ class Transacao(SQLModel, table=True):
     tipo: str
     quantidade: int # 0 - saída | 1 - entrada
     data_transacao: str | None = Field(default=None)
+
+Transacao.model_rebuild()

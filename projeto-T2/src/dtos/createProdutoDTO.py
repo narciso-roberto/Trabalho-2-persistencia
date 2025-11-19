@@ -1,14 +1,7 @@
+from sqlmodel import SQLModel
 
-
-class Produto(SQLModel, table=True):
+class ProdutoDTO(SQLModel):
     mercadoria: str
     valor: float
     quantidade: int
     categoria: str
-
-
-
-
-
-
-

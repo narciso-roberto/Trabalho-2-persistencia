@@ -1,22 +1,27 @@
 from fastapi import APIRouter
 from sqlmodel import  Session
-from dtos.createProdutoDTO import Produto
+from dtos.createProdutoDTO import ProdutoDTO
+from models.produto import Produto
 from database.database import engine
 
-router = APIRouter(prefix="/produto")
+routerProduto = APIRouter(prefix="/produto")
 
 
-@router.post("/cadastrar")
-def cadastrarProduto(novoProduto: Produto):
-    with Session(engine) as engine:
+@routerProduto.post("/cadastrar")
+def cadastrarProduto(novoProduto: ProdutoDTO):
+    with Session(engine) as session:
         try:
-            print("criar produto")
-        except:
-            print("a")
+            novo = Produto.model_validate(novoProduto)
+            # session.add(novo)
+            # session.commit()
+            return novo
+        except Exception as e:
+            session.rollback()
+            return(f"Error: {e}")
 
-@router.post("/deletar/{id}")
+@routerProduto.post("/deletar/{id}")
 def cadastrarProduto():
-    with Session(engine) as engine:
+    with Session(engine) as session:
         try:
             print("deletar produto")
         except:

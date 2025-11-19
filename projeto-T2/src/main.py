@@ -72,10 +72,12 @@
 #     session.commit()
 
 from fastapi import FastAPI
+from routers.produto_router import routerProduto
+
 
 app = FastAPI(title="sistema de estoque")
 
-
+app.include_router(routerProduto)
 
 
 

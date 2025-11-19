@@ -1,5 +1,6 @@
+from sqlmodel import SQLModel
 
-class Fornecedor(SQLModel, table=True):
+class Fornecedor(SQLModel):
     cnpj: int
     nome: str
     contato: str
