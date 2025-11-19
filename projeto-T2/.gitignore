@@ -1,1 +1,11 @@
-meu_banco.db
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+src/database/delta_*/
+src/@IDseq/*
+# Virtual environments
+.venv
