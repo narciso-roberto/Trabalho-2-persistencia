@@ -11,9 +11,9 @@ routerProduto = APIRouter(prefix="/produto")
 def cadastrarProduto(novoProduto: ProdutoDTO):
     with Session(engine) as session:
         try:
-            novo = Produto.model_validate(novoProduto)
-            # session.add(novo)
-            # session.commit()
+            novo = Produto(**novoProduto.model_dump())
+            session.add(novo)
+            session.commit()
             return novo
         except Exception as e:
             session.rollback()

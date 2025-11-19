@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, create_engine
 import sqlite3
 from sqlalchemy import event, Engine
 
-engine = create_engine("sqlite:///database.db")
+engine = create_engine("sqlite:///meu_banco.db")
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
