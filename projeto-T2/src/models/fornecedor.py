@@ -1,4 +1,6 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
+from typing import List
+
 
 class Fornecedor(SQLModel, table=True):
     idForn: int | None = Field(default=None, primary_key=True)
@@ -6,5 +8,6 @@ class Fornecedor(SQLModel, table=True):
     nome: str
     contato: str
     endereco: str
+    transacoes: List["ProdutoTransacaoFornecedor"] = Relationship(back_populates="fornecedor")
 
 Fornecedor.model_rebuild()
