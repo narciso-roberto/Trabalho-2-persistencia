@@ -8,6 +8,6 @@ class Fornecedor(SQLModel, table=True):
     nome: str
     contato: str
     endereco: str
-    transacoes: List["ProdutoTransacaoFornecedor"] = Relationship(back_populates="fornecedor")
+    transacoesFornecedor: List["ProdutoTransacaoFornecedor"] = Relationship(back_populates="fornecedor")
 
 Fornecedor.model_rebuild()

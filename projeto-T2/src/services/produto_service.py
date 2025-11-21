@@ -86,8 +86,8 @@ def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
 def fornecedoresDeProdutos(id: int):
     with Session(engine) as session:
         try:
-            statement = select(Fornecedor).options(joinedload(Fornecedor.transacoes))
-            return session.scalars(statement).unique().all()
+            statement = select(Produto).where(Produto.idProd == 7).options(joinedload(Produto.transacoesProduto))
+            return session.scalars(statement).unique().all()[0].transacoesProduto
         except Exception as e:
             session.rollback()
             return(f"Error: {e}")

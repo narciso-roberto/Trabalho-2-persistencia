@@ -5,8 +5,13 @@ class ProdutoTransacaoFornecedor(SQLModel, table=True):
     fornecedor_id: int = Field(foreign_key="fornecedor.idForn", primary_key=True)
     transacao_id: int = Field(foreign_key="transacao.transacao_id", primary_key=True)
 
+    produto: "Produto" = Relationship(back_populates="transacoesProduto")
+    fornecedor: "Fornecedor" = Relationship(back_populates="transacoesFornecedor")
+    
 
-    fornecedor: "Fornecedor" = Relationship(back_populates="transacoes")
+
+
+
 
 
 
