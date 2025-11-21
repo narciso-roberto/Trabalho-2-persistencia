@@ -7,7 +7,7 @@ from alembic import context
 
 from sqlmodel import SQLModel
 from src.models import produto
-from src.models import produtoFornecedor
+from src.models import ProdutoTransacaoFornecedor
 from src.models import fornecedor
 from src.models import transacao
 
@@ -29,8 +29,6 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 target_metadata = SQLModel.metadata
-print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-print(SQLModel.metadata.tables.keys())
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
