@@ -1,4 +1,10 @@
 from sqlmodel import Field, SQLModel, Relationship
+# COMENTE O IMPORT DE BAIXO CASO VOCE VA USAR O FASTAPI
+# from src.models.transacao import Transacao 
+
+# COMENTE O IMPORT DE BAIXO CASO VOCE VA USAR O ALEMBIC
+from models.transacao import Transacao   
+
 
 class ProdutoTransacaoFornecedor(SQLModel, table=True):
     produto_id: int = Field(foreign_key="produto.idProd", primary_key=True)
@@ -7,12 +13,8 @@ class ProdutoTransacaoFornecedor(SQLModel, table=True):
 
     produto: "Produto" = Relationship(back_populates="transacoesProduto")
     fornecedor: "Fornecedor" = Relationship(back_populates="transacoesFornecedor")
+    transacao: "Transacao" = Relationship(back_populates="itens")
     
-
-
-
-
-
 
 
 ProdutoTransacaoFornecedor.model_rebuild()

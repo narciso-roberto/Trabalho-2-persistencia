@@ -49,16 +49,16 @@ with Session(engine) as session:
     # TRANSACOES
     # -----------------------
     transacoes = [
-        Transacao(tipo=1, quantidade=50, data_transacao="2025-01-01"),
-        Transacao(tipo=1, quantidade=70, data_transacao="2025-01-02"),
-        Transacao(tipo=0, quantidade=20, data_transacao="2025-01-03"),
-        Transacao(tipo=1, quantidade=40, data_transacao="2025-01-04"),
-        Transacao(tipo=0, quantidade=10, data_transacao="2025-01-05"),
-        Transacao(tipo=1, quantidade=100, data_transacao="2025-01-06"),
-        Transacao(tipo=1, quantidade=60, data_transacao="2025-01-07"),
-        Transacao(tipo=0, quantidade=30, data_transacao="2025-01-08"),
-        Transacao(tipo=1, quantidade=80, data_transacao="2025-01-09"),
-        Transacao(tipo=0, quantidade=25, data_transacao="2025-01-10"),
+        Transacao(quantidade=50, data_transacao="2025-01-01"),
+        Transacao(quantidade=70, data_transacao="2025-01-02"),
+        Transacao(quantidade=20, data_transacao="2025-01-03"),
+        Transacao(quantidade=40, data_transacao="2025-01-04"),
+        Transacao(quantidade=10, data_transacao="2025-01-05"),
+        Transacao(quantidade=100, data_transacao="2025-01-06"),
+        Transacao(quantidade=60, data_transacao="2025-01-07"),
+        Transacao(quantidade=30, data_transacao="2025-01-08"),
+        Transacao(quantidade=80, data_transacao="2025-01-09"),
+        Transacao(quantidade=25, data_transacao="2025-01-10"),
     ]
 
     session.add_all(transacoes)

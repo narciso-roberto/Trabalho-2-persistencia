@@ -1,8 +1,8 @@
-"""mudanca no banco
+"""tirando tpo de transacao
 
-Revision ID: 485febb0a539
-Revises: 
-Create Date: 2025-11-20 11:24:36.468918
+Revision ID: a4752ceaeae5
+Revises: 3b9e2564f710
+Create Date: 2025-11-22 17:07:47.888492
 
 """
 from typing import Sequence, Union
@@ -13,8 +13,8 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '5b8dc5ea9b69'
-down_revision: Union[str, Sequence[str], None] = None
+revision: str = 'a4752ceaeae5'
+down_revision: Union[str, Sequence[str], None] = '3b9e2564f710'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

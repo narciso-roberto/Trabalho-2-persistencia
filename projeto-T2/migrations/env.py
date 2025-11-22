@@ -5,12 +5,18 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from sqlmodel import SQLModel
-from src.models import produto
-from src.models import ProdutoTransacaoFornecedor
-from src.models import fornecedor
-from src.models import transacao
 
+import sys
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  
+sys.path.append(BASE_DIR)
+
+from sqlmodel import SQLModel
+from src.models.produto import Produto
+from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from src.models.fornecedor import Fornecedor
+from src.models.transacao import Transacao
 
 
 

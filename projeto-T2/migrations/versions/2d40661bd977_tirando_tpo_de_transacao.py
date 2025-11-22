@@ -1,8 +1,8 @@
-"""Add relacionamento fornecedor-produto
+"""tirando tpo de transacao
 
-Revision ID: db4954e35327
-Revises: eca030b29dbe
-Create Date: 2025-11-21 10:36:50.534779
+Revision ID: 2d40661bd977
+Revises: 8c46dba2f60c
+Create Date: 2025-11-22 17:14:20.755689
 
 """
 from typing import Sequence, Union
@@ -13,8 +13,8 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'db4954e35327'
-down_revision: Union[str, Sequence[str], None] = 'eca030b29dbe'
+revision: str = '2d40661bd977'
+down_revision: Union[str, Sequence[str], None] = '8c46dba2f60c'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

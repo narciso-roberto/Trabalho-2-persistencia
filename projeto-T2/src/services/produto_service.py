@@ -6,7 +6,7 @@ from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
 from models.fornecedor import Fornecedor
 from sqlalchemy import delete,select
 from fastapi import Query
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 #Verificar se os produtos nao estao vazios
 
 def produtoPorId(id: int):
@@ -86,8 +86,28 @@ def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
 def fornecedoresDeProdutos(id: int):
     with Session(engine) as session:
         try:
-            statement = select(Produto).where(Produto.idProd == 7).options(joinedload(Produto.transacoesProduto))
-            return session.scalars(statement).unique().all()[0].transacoesProduto
+            # statement = select(Produto).where(Produto.idProd == 7).options(joinedload(Produto.transacoesProduto))
+            # transacao = session.scalar(statement)
+            # statement2 = select(ProdutoTransacaoFornecedor).where(ProdutoTransacaoFornecedor.produto_id == transacao.idProd).options(joinedload(ProdutoTransacaoFornecedor.fornecedor))
+            # resultado2 = session.scalars(statement2).unique().all()
+
+            # lista = []
+            # for x in resultado2:
+            #     lista.append(x.fornecedor.nome)
+            # return lista
+
+            statement = (
+                select(Produto).where(Produto.idProd == 7)
+                .options(
+                    selectinload(Produto.transacoesProduto)
+                        .selectinload(ProdutoTransacaoFornecedor.fornecedor)
+                )
+            )
+
+            resultado2 = session.scalar(statement)
+            return resultado2.transacoesProduto
+        
+
         except Exception as e:
             session.rollback()
             return(f"Error: {e}")

@@ -75,7 +75,7 @@ from fastapi import FastAPI
 from routers.produto_router import routerProduto
 
 
-app = FastAPI(title="sistema de estoque")
+app = FastAPI(title="Sistema de Estoque")
 
 app.include_router(routerProduto)
 
