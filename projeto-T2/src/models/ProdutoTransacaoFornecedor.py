@@ -1,9 +1,6 @@
 from sqlmodel import Field, SQLModel, Relationship
-# COMENTE O IMPORT DE BAIXO CASO VOCE VA USAR O FASTAPI
-# from src.models.transacao import Transacao 
 
-# COMENTE O IMPORT DE BAIXO CASO VOCE VA USAR O ALEMBIC
-from models.transacao import Transacao   
+from src.models.transacao import Transacao 
 
 
 class ProdutoTransacaoFornecedor(SQLModel, table=True):
