@@ -7,14 +7,33 @@ from sqlalchemy import delete
 def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
     with Session(engine) as session:
         try:
-            new = Produto(**novoFornecedor.model_dump())
+            new = Fornecedor(**novoFornecedor.model_dump())
             session.add(new)
             session.commit()
             return new
         except Exception as error:
             session.rollback()
             return(f"Error: {error}")
-        
+
+def atualizarFornecedor(id: int, newData: FornecedorDTO):
+    with Session(engine) as session:
+        try:
+            fornecedor = session.get(Fornecedor, id)
+            if not fornecedor:
+                return "Fornecedor com id {} não encontrado.".format(id)
+
+            for chave, valor in newData.model_dump().items():
+                setattr(fornecedor, chave, valor)
+
+            session.add(fornecedor)
+            session.commit()
+            session.refresh(fornecedor)
+
+            return fornecedor
+        except Exception as error:
+            session.rollback()
+            return(f"Error: {error}")
+
 def deletarFornecedor(id: int):
     with Session(engine) as session:
         try:
