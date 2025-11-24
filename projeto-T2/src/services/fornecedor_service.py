@@ -4,6 +4,18 @@ from database.database import engine
 from models.fornecedor import Fornecedor
 from sqlalchemy import delete
 
+def lerFornecedor(id: int):
+    try:
+        with Session(engine) as session:
+            fornecedor = session.get(Fornecedor, id)
+            if not fornecedor:
+                return f"Fornecedor com id {id} não encontrado."
+            
+            return fornecedor
+    except Exception as error:
+        return f"Error: {error}"
+
+
 def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
     with Session(engine) as session:
         try:
@@ -20,7 +32,7 @@ def atualizarFornecedor(id: int, newData: FornecedorDTO):
         try:
             fornecedor = session.get(Fornecedor, id)
             if not fornecedor:
-                return "Fornecedor com id {} não encontrado.".format(id)
+                return "Fornecedor com id {id} não encontrado."
 
             for chave, valor in newData.model_dump().items():
                 setattr(fornecedor, chave, valor)
