@@ -1,5 +1,5 @@
-from sqlmodel import Field, SQLModel, Relationship
 
+from sqlmodel import Field, SQLModel, Relationship
 from src.models.transacao import Transacao 
 
 

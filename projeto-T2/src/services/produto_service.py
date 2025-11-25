@@ -97,15 +97,22 @@ def fornecedoresDeProdutos(id: int):
             # return lista
 
             statement = (
-                select(Produto).where(Produto.idProd == 7)
+                select(Produto).where(Produto.idProd == id)
                 .options(
-                    selectinload(Produto.transacoesProduto)
-                        .selectinload(ProdutoTransacaoFornecedor.fornecedor)
+                    joinedload(Produto.transacoesProduto).
+                    joinedload(ProdutoTransacaoFornecedor.fornecedor),
+                    
                 )
             )
 
-            resultado2 = session.scalar(statement)
-            return resultado2.transacoesProduto
+            listaTransacoes = session.scalar(statement).transacoesProduto
+
+            listaForn = []
+            for x in listaTransacoes:
+                if x not in listaForn:
+                    listaForn.append(x.fornecedor.nome)
+
+            return listaForn
         
 
         except Exception as e:
