@@ -1,13 +1,19 @@
 from sqlmodel import  Session
-from dtos.createProdutoDTO import ProdutoDTO
-from database.database import engine
-from models.produto import Produto
-from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from models.fornecedor import Fornecedor
+from src.dtos.createProdutoDTO import ProdutoDTO
+from src.database.database import engine
+from src.models.produto import Produto
+from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from src.models.fornecedor import Fornecedor
+from src.models.transacao import Transacao
 from sqlalchemy import delete,select
 from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload
+import logging
+from datetime import datetime
 #Verificar se os produtos nao estao vazios
+
+logging.basicConfig()
+logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 def produtoPorId(id: int):
     with Session(engine) as session:
@@ -86,15 +92,9 @@ def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
 def fornecedoresDeProdutos(id: int):
     with Session(engine) as session:
         try:
-            # statement = select(Produto).where(Produto.idProd == 7).options(joinedload(Produto.transacoesProduto))
-            # transacao = session.scalar(statement)
-            # statement2 = select(ProdutoTransacaoFornecedor).where(ProdutoTransacaoFornecedor.produto_id == transacao.idProd).options(joinedload(ProdutoTransacaoFornecedor.fornecedor))
-            # resultado2 = session.scalars(statement2).unique().all()
 
-            # lista = []
-            # for x in resultado2:
-            #     lista.append(x.fornecedor.nome)
-            # return lista
+            if thisExist(session,id,Produto):
+                raise ValueError("O Produto nao existe")
 
             statement = (
                 select(Produto).where(Produto.idProd == id)
@@ -119,6 +119,42 @@ def fornecedoresDeProdutos(id: int):
             session.rollback()
             return(f"Error: {e}")
 
+def ProdutosDataTransacoes(dataInicio: str, dataFim: str):
+
+    try:
+        dataInicioFormated = datetime.strptime(dataInicio, "%d-%m-%Y").strftime("%Y-%m-%d")
+        dataFimFormated = datetime.strptime(dataFim, "%d-%m-%Y").strftime("%Y-%m-%d")
+    except Exception as e:
+        # TRATAR MELHOR ESSES ERROS
+        return(f"Error: Data formatada incorretamente.")
+
+    
+    with Session(engine) as session:
+        try:
+            statement = (
+                select(Transacao).
+                where(Transacao.data_transacao >= dataInicioFormated, 
+                    Transacao.data_transacao <= dataFimFormated).
+                    options(selectinload(Transacao.itens).
+                    joinedload(ProdutoTransacaoFornecedor.produto))
+                    
+            )
+
+            listaTransacoes = session.scalars(statement).all()
+
+            
+            produtos = [
+                {"TransacaoID": transacao.transacao_id, "Mercadoria":item.produto.mercadoria, "qtd": transacao.quantidade}
+                for transacao in listaTransacoes
+                for item in transacao.itens
+            ]
+            
+        
+            return produtos
+        except Exception as e:
+            session.rollback()
+            return(f"Error: {e}")
+
 
 
 
@@ -137,6 +173,13 @@ def fornecedoresDeProdutos(id: int):
 
 
 #UTILITARIOS
+
+def thisExist(sessao, id, objeto):
+    obj = sessao.get(objeto, id)
+
+    if obj:
+        return 0
+    return 1
 
 def isIncomplete(obj):
     dados = obj.model_dump()

@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel, Session, create_engine
-from models.produto import Produto
-from models.fornecedor import Fornecedor
-from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from models.transacao import Transacao
-from database.database import engine
+from src.models.produto import Produto
+from src.models.fornecedor import Fornecedor
+from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from src.models.transacao import Transacao
+from src.database.database import engine
 
 with Session(engine) as session:
 
@@ -68,8 +68,8 @@ with Session(engine) as session:
     # # -----------------------
 
     ptf = [
-        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=4, transacao_id=1),
-        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=5, transacao_id=1),
+        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=6, transacao_id=1),
+        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=7, transacao_id=1),
     ]
 
     session.add_all(ptf)
