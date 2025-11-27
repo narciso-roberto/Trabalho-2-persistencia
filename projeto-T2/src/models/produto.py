@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 
 
 class Produto(SQLModel, table=True):
@@ -7,6 +7,7 @@ class Produto(SQLModel, table=True):
     valor: float
     quantidade: int
     categoria: str
+    transacoesProduto: list["ProdutoTransacaoFornecedor"] = Relationship(back_populates="produto")
 
 Produto.model_rebuild()
 

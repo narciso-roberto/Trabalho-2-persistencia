@@ -71,11 +71,22 @@
 #     session.add(transacao_1)
 #     session.commit()
 
+import sys
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+
+# Esse trambolho de codigo faz com que o fastAPI veja a pasta PROJETO-T2 como a pasta raiz
+
 from fastapi import FastAPI
-from routers.produto_router import routerProduto
+from src.routers.produto_router import routerProduto
 
 
-app = FastAPI(title="sistema de estoque")
+
+app = FastAPI(title="Sistema de Estoque")
 
 app.include_router(routerProduto)
 

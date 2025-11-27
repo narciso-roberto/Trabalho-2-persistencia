@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 # from sqlmodel import  Session
-from dtos.createProdutoDTO import ProdutoDTO
+from src.dtos.createProdutoDTO import ProdutoDTO
 # from database.database import engine
 # from models.produto import Produto
 # from models.produtoFornecedor import ProdutoFornecedor
@@ -8,15 +8,26 @@ from dtos.createProdutoDTO import ProdutoDTO
 # from sqlalchemy import select, delete
 
 
-
-
-
-
-from services import produto_service as service
+from src.services import produto_service as service
 
 
 routerProduto = APIRouter(prefix="/produto")
 
+@routerProduto.get("/ProdutoPorId/{id}")
+def produtoPorId(id:int):
+    return service.produtoPorId(id)
+
+@routerProduto.get("/visualizar/{pagina}/{qtd}")
+def visualizarProduto(pagina: int, qtd:int):
+    return service.visualizarProdutos(pagina,qtd)
+
+@routerProduto.get("/fornecedoresDeProdutos/{id}")
+def fornecedoresDeProdutos(id: int):
+    return service.fornecedoresDeProdutos(id)
+
+@routerProduto.get("/produtosDataTransacoes")
+def atualizarProduto(dataInicio: str, dataFim: str):
+    return service.ProdutosDataTransacoes(dataInicio,dataFim)
 
 @routerProduto.post("/cadastrar")
 def cadastrarProduto(novoProduto: ProdutoDTO):
@@ -26,4 +37,6 @@ def cadastrarProduto(novoProduto: ProdutoDTO):
 def deletarProduto(id: int):
     return service.deletarProduto(id)
 
-
+@routerProduto.put("/atualizar/{id}")
+def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
+    return service.atualizarProduto(id, atualizadoProduto)
