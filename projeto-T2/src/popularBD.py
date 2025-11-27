@@ -28,20 +28,7 @@ with Session(engine) as session:
     # # -----------------------
     # # 10 PRODUTOS
     # # -----------------------
-    # produtos = [
-    #     Produto(idProd=1, mercadoria="Arroz", valor=20.50, quantidade=100, categoria="Alimento"),
-    #     Produto(idProd=2, mercadoria="Feijão", valor=10.0, quantidade=150, categoria="Alimento"),
-    #     Produto(idProd=3, mercadoria="Macarrão", valor=7.8, quantidade=200, categoria="Alimento"),
-    #     Produto(idProd=4, mercadoria="Óleo", valor=6.5, quantidade=180, categoria="Alimento"),
-    #     Produto(idProd=5, mercadoria="Açúcar", valor=5.2, quantidade=140, categoria="Alimento"),
-    #     Produto(idProd=6, mercadoria="Sabonete", valor=2.5, quantidade=300, categoria="Higiene"),
-    #     Produto(idProd=7, mercadoria="Detergente", valor=3.0, quantidade=250, categoria="Limpeza"),
-    #     Produto(idProd=8, mercadoria="Shampoo", valor=12.0, quantidade=120, categoria="Higiene"),
-    #     Produto(idProd=9, mercadoria="Café", valor=15.0, quantidade=90, categoria="Alimento"),
-    #     Produto(idProd=10, mercadoria="Sal", valor=2.0, quantidade=500, categoria="Alimento"),
-    # ]
-
-    # session.add_all(produtos)
+    
 
 
 
@@ -67,9 +54,23 @@ with Session(engine) as session:
     # # ProdutoTransacaoFornecedor
     # # -----------------------
 
+    produtos = [
+        Fornecedor(idForn=i, cnpj=44444444444444, nome="Fornecedor D", contato="contatoD@gmail.com", endereco="Rua D, 400")
+        for i in range(160, 10000)
+    ]
+
+    session.add_all(produtos)
+
+    produtoss = [
+        Produto(idProd=i, mercadoria="Café", valor=15.0, quantidade=90, categoria="Alimento")
+        for i in range(160, 10000)
+    ]
+
+    session.add_all(produtoss)
+
     ptf = [
-        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=6, transacao_id=1),
-        ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=7, transacao_id=1),
+    ProdutoTransacaoFornecedor(produto_id=i, fornecedor_id=i, transacao_id=1)
+        for i in range(160, 10000)
     ]
 
     session.add_all(ptf)
