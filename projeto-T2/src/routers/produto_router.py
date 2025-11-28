@@ -15,7 +15,7 @@ from dtos.createProdutoDTO import ProdutoDTO
 from services import produto_service as service
 
 
-routerProduto = APIRouter(prefix="/produto")
+routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
 
 
 @routerProduto.post("/cadastrar")
