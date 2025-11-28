@@ -11,3 +11,4 @@ src/@IDseq/*
 # Virtual environments.
 .venv
 *.pyc
+teste.py

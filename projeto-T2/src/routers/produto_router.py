@@ -11,7 +11,7 @@ from src.dtos.createProdutoDTO import ProdutoDTO
 from src.services import produto_service as service
 
 
-routerProduto = APIRouter(prefix="/produto")
+routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
 
 @routerProduto.get("/ProdutoPorId/{id}")
 def produtoPorId(id:int):
