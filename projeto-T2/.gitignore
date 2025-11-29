@@ -1,5 +1,7 @@
 meu_banco.db
 # Python-generated files.
+.env
+*pycache*
 __pycache__/
 *.py[oc]
 build/
