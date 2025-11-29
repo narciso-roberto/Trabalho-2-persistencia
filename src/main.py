@@ -20,8 +20,8 @@ app = FastAPI(
 )
 
 @app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
+async def on_startup():
+    await create_db_and_tables()
 
 app.include_router(routerProduto)
 app.include_router(routerFornecedor)
