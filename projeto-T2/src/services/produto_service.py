@@ -3,13 +3,14 @@ from src.dtos.createProdutoDTO import ProdutoDTO
 from src.database.database import engine
 from src.models.produto import Produto
 from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from src.models.fornecedor import Fornecedor
 from src.models.transacao import Transacao
 from sqlalchemy import delete,select
 from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload
 import logging
 from datetime import datetime
+from fastapi import HTTPException
+
 #Verificar se os produtos nao estao vazios
 
 logging.basicConfig()
@@ -28,9 +29,17 @@ def produtoPorId(id: int):
             
             )
             produto = session.scalar(stmt)
+
+            if produto is None:
+                raise 
+            
             return produto
         except Exception as e:
             session.rollback()
+
+            if produto is None:
+                raise HTTPException(status_code=404, detail="Produto não encontrado")
+            
             return(f"Error: {e}")
 
 def visualizarProdutos(offset: int, limit:int = Query(default=10,le=100)):
