@@ -1,26 +1,37 @@
-from sqlmodel import SQLModel, create_engine
-import sqlite3
-from sqlalchemy import event, Engine
-from dotenv import load_dotenv
-
-import sys
 import os
+import sys
+import sqlite3
+from dotenv import load_dotenv
+from sqlmodel import SQLModel, create_engine
+from sqlalchemy import event, Engine
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-
 load_dotenv()
 
-DB_SQLITE = os.getenv("DB_SQLITE")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DB_SQLITE)
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL não está configurada no .env")
 
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,
+    connect_args=connect_args
+)
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
-    if type(dbapi_connection) is sqlite3.Connection:
-        cursos = dbapi_connection.cursor()
-        cursos.execute("PRAGMA foreign_keys=ON")
-        cursos.close()
+    if isinstance(dbapi_connection, sqlite3.Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
