@@ -10,4 +10,14 @@ class Fornecedor(SQLModel, table=True):
     endereco: str
     transacoesFornecedor: List["ProdutoTransacaoFornecedor"] = Relationship(back_populates="fornecedor")
 
+class FornecedorResponse(SQLModel):
+    model_config = {"from_attributes": True}
+    cnpj: int
+    nome: str
+    contato: str
+    endereco: str
+    
+
+
+
 Fornecedor.model_rebuild()

@@ -12,4 +12,15 @@ class ProdutoTransacaoFornecedor(SQLModel, table=True):
     
 
 
+from src.models.fornecedor import Fornecedor
+from src.models.transacao import TransacaoResponse
+
+
+class PTFResponse(SQLModel):
+    model_config = {"from_attributes": True}
+    produto: "Produto" = Relationship(back_populates="transacoesProduto")
+    fornecedor: Fornecedor 
+    transacao: TransacaoResponse
+
+
 ProdutoTransacaoFornecedor.model_rebuild()

@@ -1,29 +1,45 @@
 from sqlmodel import  Session
-from dtos.createProdutoDTO import ProdutoDTO
-from database.database import engine
-from models.produto import Produto
-from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from models.fornecedor import Fornecedor
-from models.transacao import Transacao
+from src.dtos.createProdutoDTO import ProdutoDTO
+from src.database.database import engine
+from src.models.produto import Produto
+from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from src.models.transacao import Transacao
 from sqlalchemy import delete,select
 from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload
 import logging
 from datetime import datetime
+from fastapi import HTTPException
+
 #Verificar se os produtos nao estao vazios
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
+
+
 def produtoPorId(id: int):
     with Session(engine) as session:
         try:
-            produto = session.get(Produto,id)
+            stmt = (
+            select(Produto)
+            .options(selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.fornecedor),
+            selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.transacao) 
+            ).where(Produto.idProd == id)
+            
+            )
+            produto = session.scalar(stmt)
+
             if produto is None:
-                return "Produto inexistente"
+                raise 
+            
             return produto
         except Exception as e:
             session.rollback()
+
+            if produto is None:
+                raise HTTPException(status_code=404, detail="Produto não encontrado")
+            
             return(f"Error: {e}")
 
 def visualizarProdutos(offset: int, limit:int = Query(default=10,le=100)):
