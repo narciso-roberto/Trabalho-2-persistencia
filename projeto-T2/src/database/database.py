@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, create_engine
 import sqlite3
 from sqlalchemy import event, Engine
+from dotenv import load_dotenv
 
 import sys
 import os
@@ -9,8 +10,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-engine = create_engine("sqlite:///meu_banco.db")
-# database_url = 'postgresql://persistencia:12345@localhost:5432/meu_postgress'
+
+load_dotenv()
+
+DB_SQLITE = os.getenv("DB_SQLITE")
+
+engine = create_engine(DB_SQLITE)
 
 
 @event.listens_for(Engine, "connect")
