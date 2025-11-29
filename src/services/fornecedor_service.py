@@ -1,22 +1,31 @@
-from sqlmodel import  Session, select
+from sqlmodel import select
 from dtos.createFornecedorDTO import FornecedorDTO
-from database.database import engine
+from database.database import AsyncSessionLocal
 from models.fornecedor import Fornecedor
 from sqlalchemy import delete
 
-def listarFornecedores(page: int = 1, page_size: int = 10):
-    with Session(engine) as session:
+
+async def listarFornecedores(page: int = 1, page_size: int = 10):
+    async with AsyncSessionLocal() as session:
         try:
             offset = (page - 1) * page_size
-            total = session.exec(select(Fornecedor)).all()
-            total_count = len(total)
+            total_result = await session.exec(select(Fornecedor))
+            try:
+                total_list = total_result.scalars().all()
+            except AttributeError:
+                total_list = total_result.all()
+            total_count = len(total_list)
 
             query = (
                 select(Fornecedor)
                 .offset(offset)
                 .limit(page_size)
             )
-            fornecedores = session.exec(query).all()
+            res = await session.exec(query)
+            try:
+                fornecedores = res.scalars().all()
+            except AttributeError:
+                fornecedores = res.all()
 
             return {
                 "page": page,
@@ -28,8 +37,9 @@ def listarFornecedores(page: int = 1, page_size: int = 10):
         except Exception as error:
             return f"Error: {error}"
 
-def buscar_fornecedor_por_nome(nome: str, limit: int = 20, offset: int = 0):
-    with Session(engine) as session:
+
+async def buscar_fornecedor_por_nome(nome: str, limit: int = 20, offset: int = 0):
+    async with AsyncSessionLocal() as session:
         try:
             query = (
                 select(Fornecedor)
@@ -38,60 +48,69 @@ def buscar_fornecedor_por_nome(nome: str, limit: int = 20, offset: int = 0):
                 .offset(offset)
             )
 
-            results = session.exec(query).all()
+            res = await session.exec(query)
+            try:
+                results = res.scalars().all()
+            except AttributeError:
+                results = res.all()
             return results
         except Exception as error:
             return f"Error: {error}"
 
-def lerFornecedor(id: int):
-    with Session(engine) as session:
+
+async def lerFornecedor(id: int):
+    async with AsyncSessionLocal() as session:
         try:
-            fornecedor = session.get(Fornecedor, id)
+            fornecedor = await session.get(Fornecedor, id)
             if not fornecedor:
                 return f"Fornecedor com id {id} não encontrado."
-            
+
             return fornecedor
         except Exception as error:
             return f"Error: {error}"
 
-def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
-    with Session(engine) as session:
+
+async def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
+    async with AsyncSessionLocal() as session:
         try:
             new = Fornecedor(**novoFornecedor.model_dump())
             session.add(new)
-            session.commit()
+            await session.commit()
+            await session.refresh(new)
             return new
         except Exception as error:
-            session.rollback()
-            return(f"Error: {error}")
+            await session.rollback()
+            return (f"Error: {error}")
 
-def atualizarFornecedor(id: int, newData: FornecedorDTO):
-    with Session(engine) as session:
+
+async def atualizarFornecedor(id: int, newData: FornecedorDTO):
+    async with AsyncSessionLocal() as session:
         try:
-            fornecedor = session.get(Fornecedor, id)
+            fornecedor = await session.get(Fornecedor, id)
             if not fornecedor:
-                return "Fornecedor com id {id} não encontrado."
+                return f"Fornecedor com id {id} não encontrado."
 
             for chave, valor in newData.model_dump().items():
                 setattr(fornecedor, chave, valor)
 
             session.add(fornecedor)
-            session.commit()
-            session.refresh(fornecedor)
+            await session.commit()
+            await session.refresh(fornecedor)
 
             return fornecedor
         except Exception as error:
-            session.rollback()
-            return(f"Error: {error}")
+            await session.rollback()
+            return (f"Error: {error}")
 
-def deletarFornecedor(id: int):
-    with Session(engine) as session:
+
+async def deletarFornecedor(id: int):
+    async with AsyncSessionLocal() as session:
         try:
-            deletedFornecedor = delete(Fornecedor).where(Fornecedor.idForn == id) 
-            session.exec(deletedFornecedor)
-            session.commit()
+            deletedFornecedor = delete(Fornecedor).where(Fornecedor.idForn == id)
+            await session.exec(deletedFornecedor)
+            await session.commit()
 
             return "Fornecedor deletado com sucesso."
         except Exception as error:
-            session.rollback()
-            return(f"Error: {error}")
+            await session.rollback()
+            return (f"Error: {error}")

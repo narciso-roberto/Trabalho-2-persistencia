@@ -12,25 +12,25 @@ from services.fornecedor_service import (
 routerFornecedor = APIRouter(prefix="/fornecedor", tags=["Fornecedor"])
 
 @routerFornecedor.get("/")
-def listar_fornecedores(page: int = 1, page_size: int = 10):
-    return listarFornecedores(page, page_size)
+async def listar_fornecedores(page: int = 1, page_size: int = 10):
+    return await listarFornecedores(page, page_size)
 
 @routerFornecedor.get("/buscar")
-def buscar_por_nome(nome: str):
-    return buscar_fornecedor_por_nome(nome)
+async def buscar_por_nome(nome: str):
+    return await buscar_fornecedor_por_nome(nome)
 
 @routerFornecedor.get("/{id}")
-def ler_fornecedor(id: int):
-    return lerFornecedor(id)
+async def ler_fornecedor(id: int):
+    return await lerFornecedor(id)
 
 @routerFornecedor.post("")
-def criar_fornecedor(fornecedor: FornecedorDTO):
-    return cadastrarFornecedor(fornecedor)
+async def criar_fornecedor(fornecedor: FornecedorDTO):
+    return await cadastrarFornecedor(fornecedor)
 
 @routerFornecedor.put("/{id}")
-def atualizar_fornecedor(id: int, fornecedor: FornecedorDTO):
-    return atualizarFornecedor(id, fornecedor)
+async def atualizar_fornecedor(id: int, fornecedor: FornecedorDTO):
+    return await atualizarFornecedor(id, fornecedor)
 
 @routerFornecedor.delete("/{id}")
-def deletar_fornecedor(id: int):
-    return deletarFornecedor(id)
+async def deletar_fornecedor(id: int):
+    return await deletarFornecedor(id)
