@@ -9,9 +9,11 @@ async def listarFornecedores(page: int = 1, page_size: int = 10):
     async with AsyncSessionLocal() as session:
         try:
             offset = (page - 1) * page_size
-
             total_result = await session.exec(select(Fornecedor))
-            total_list = total_result.scalars().all()
+            try:
+                total_list = total_result.scalars().all()
+            except AttributeError:
+                total_list = total_result.all()
             total_count = len(total_list)
 
             query = (
@@ -20,7 +22,10 @@ async def listarFornecedores(page: int = 1, page_size: int = 10):
                 .limit(page_size)
             )
             res = await session.exec(query)
-            fornecedores = res.scalars().all()
+            try:
+                fornecedores = res.scalars().all()
+            except AttributeError:
+                fornecedores = res.all()
 
             return {
                 "page": page,
@@ -44,7 +49,10 @@ async def buscar_fornecedor_por_nome(nome: str, limit: int = 20, offset: int = 0
             )
 
             res = await session.exec(query)
-            results = res.scalars().all()
+            try:
+                results = res.scalars().all()
+            except AttributeError:
+                results = res.all()
             return results
         except Exception as error:
             return f"Error: {error}"
