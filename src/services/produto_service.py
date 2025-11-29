@@ -1,10 +1,10 @@
 from sqlmodel import  Session
-from src.dtos.createProdutoDTO import ProdutoDTO
-from src.database.database import engine
-from src.models.produto import Produto
-from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from src.models.fornecedor import Fornecedor
-from src.models.transacao import Transacao
+from dtos.createProdutoDTO import ProdutoDTO
+from database.database import engine
+from models.produto import Produto
+from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from models.fornecedor import Fornecedor
+from models.transacao import Transacao
 from sqlalchemy import delete,select
 from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload

@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel, Session, create_engine
-from src.models.produto import Produto
-from src.models.fornecedor import Fornecedor
-from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from src.models.transacao import Transacao
-from src.database.database import engine
+from models.produto import Produto
+from models.fornecedor import Fornecedor
+from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from models.transacao import Transacao
+from database.database import engine
 
 with Session(engine) as session:
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 # from sqlmodel import  Session
-from src.dtos.createProdutoDTO import ProdutoDTO
+from dtos.createProdutoDTO import ProdutoDTO
 # from database.database import engine
 # from models.produto import Produto
 # from models.produtoFornecedor import ProdutoFornecedor
@@ -8,7 +8,7 @@ from src.dtos.createProdutoDTO import ProdutoDTO
 # from sqlalchemy import select, delete
 
 
-from src.services import produto_service as service
+from services import produto_service as service
 
 
 routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
