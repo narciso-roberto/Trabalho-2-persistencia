@@ -14,29 +14,29 @@ from services import produto_service as service
 routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
 
 @routerProduto.get("/ProdutoPorId/{id}")
-def produtoPorId(id:int):
-    return service.produtoPorId(id)
+async def produtoPorId(id:int):
+    return await service.produtoPorId(id)
 
 @routerProduto.get("/visualizar/{pagina}/{qtd}")
-def visualizarProduto(pagina: int, qtd:int):
-    return service.visualizarProdutos(pagina,qtd)
+async def visualizarProduto(pagina: int, qtd:int):
+    return await service.visualizarProdutos(pagina,qtd)
 
 @routerProduto.get("/fornecedoresDeProdutos/{id}")
-def fornecedoresDeProdutos(id: int):
-    return service.fornecedoresDeProdutos(id)
+async def fornecedoresDeProdutos(id: int):
+    return await service.fornecedoresDeProdutos(id)
 
 @routerProduto.get("/produtosDataTransacoes")
-def atualizarProduto(dataInicio: str, dataFim: str):
-    return service.ProdutosDataTransacoes(dataInicio,dataFim)
+async def atualizarProduto(dataInicio: str, dataFim: str):
+    return await service.ProdutosDataTransacoes(dataInicio,dataFim)
 
 @routerProduto.post("/cadastrar")
-def cadastrarProduto(novoProduto: ProdutoDTO):
-    return service.cadastrarProduto(novoProduto)
+async def cadastrarProduto(novoProduto: ProdutoDTO):
+    return await service.cadastrarProduto(novoProduto)
 
 @routerProduto.delete("/deletar/{id}")
-def deletarProduto(id: int):
-    return service.deletarProduto(id)
+async def deletarProduto(id: int):
+    return await service.deletarProduto(id)
 
 @routerProduto.put("/atualizar/{id}")
-def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
-    return service.atualizarProduto(id, atualizadoProduto)
+async def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
+    return await service.atualizarProduto(id, atualizadoProduto)
