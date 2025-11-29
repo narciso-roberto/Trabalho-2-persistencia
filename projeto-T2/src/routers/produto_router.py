@@ -1,19 +1,11 @@
 from fastapi import APIRouter
-# from sqlmodel import  Session
 from src.dtos.createProdutoDTO import ProdutoDTO
-# from database.database import engine
-# from models.produto import Produto
-# from models.produtoFornecedor import ProdutoFornecedor
-# from models.transacao import Transacao
-# from sqlalchemy import select, delete
-
-
 from src.services import produto_service as service
-
+from src.models.produto import ProdutoResponse
 
 routerProduto = APIRouter(prefix="/produto")
 
-@routerProduto.get("/ProdutoPorId/{id}")
+@routerProduto.get("/ProdutoPorId/{id}", response_model=ProdutoResponse)
 def produtoPorId(id:int):
     return service.produtoPorId(id)
 

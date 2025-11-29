@@ -15,12 +15,19 @@ from datetime import datetime
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
+
+
 def produtoPorId(id: int):
     with Session(engine) as session:
         try:
-            produto = session.get(Produto,id)
-            if produto is None:
-                return "Produto inexistente"
+            stmt = (
+            select(Produto)
+            .options(selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.fornecedor),
+            selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.transacao) 
+            ).where(Produto.idProd == id)
+            
+            )
+            produto = session.scalar(stmt)
             return produto
         except Exception as e:
             session.rollback()
