@@ -1,4 +1,5 @@
-meu_banco.db
+*.db
+
 # Python-generated files.
 .env
 *pycache*
@@ -10,8 +11,8 @@ wheels/
 *.egg-info
 src/database/delta_*/
 src/@IDseq/*
+
 # Virtual environments.
 .venv
 *.pyc
 teste.py
-database.db
