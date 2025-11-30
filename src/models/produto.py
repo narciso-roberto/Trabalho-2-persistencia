@@ -2,6 +2,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from typing import List
 
 class Produto(SQLModel, table=True):
+    __tablename__ = "produto"
     idProd: int | None = Field(default=None, primary_key=True)
     mercadoria: str
     valor: float
