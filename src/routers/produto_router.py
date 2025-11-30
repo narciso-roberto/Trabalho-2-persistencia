@@ -1,42 +1,34 @@
 from fastapi import APIRouter
-# from sqlmodel import  Session
 from dtos.createProdutoDTO import ProdutoDTO
-# from database.database import engine
-# from models.produto import Produto
-# from models.produtoFornecedor import ProdutoFornecedor
-# from models.transacao import Transacao
-# from sqlalchemy import select, delete
-
-
 from services import produto_service as service
-
+from models.produto import ProdutoResponse
 
 routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
 
-@routerProduto.get("/ProdutoPorId/{id}")
-def produtoPorId(id:int):
-    return service.produtoPorId(id)
+@routerProduto.get("/ProdutoPorId/{id}", response_model=ProdutoResponse)
+async def produtoPorId(id:int):
+    return await service.produtoPorId(id)
 
 @routerProduto.get("/visualizar/{pagina}/{qtd}")
-def visualizarProduto(pagina: int, qtd:int):
-    return service.visualizarProdutos(pagina,qtd)
+async def visualizarProduto(pagina: int, qtd:int):
+    return await service.visualizarProdutos(pagina,qtd)
 
 @routerProduto.get("/fornecedoresDeProdutos/{id}")
-def fornecedoresDeProdutos(id: int):
-    return service.fornecedoresDeProdutos(id)
+async def fornecedoresDeProdutos(id: int, offset: int = 0):
+    return await service.fornecedoresDeProdutos(id, offset) 
 
 @routerProduto.get("/produtosDataTransacoes")
-def atualizarProduto(dataInicio: str, dataFim: str):
-    return service.ProdutosDataTransacoes(dataInicio,dataFim)
+async def atualizarProduto(dataInicio: str, dataFim: str, offset: int = 0):
+    return await service.ProdutosDataTransacoes(dataInicio,dataFim,offset)
 
 @routerProduto.post("/cadastrar")
-def cadastrarProduto(novoProduto: ProdutoDTO):
-    return service.cadastrarProduto(novoProduto)
+async def cadastrarProduto(novoProduto: ProdutoDTO):
+    return await service.cadastrarProduto(novoProduto)
 
 @routerProduto.delete("/deletar/{id}")
-def deletarProduto(id: int):
-    return service.deletarProduto(id)
+async def deletarProduto(id: int):
+    return await service.deletarProduto(id)
 
 @routerProduto.put("/atualizar/{id}")
-def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
-    return service.atualizarProduto(id, atualizadoProduto)
+async def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
+    return await service.atualizarProduto(id, atualizadoProduto)
