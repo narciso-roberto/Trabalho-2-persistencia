@@ -6,18 +6,21 @@ from sqlalchemy import pool
 from alembic import context
 
 from sqlmodel import SQLModel
+from dotenv import load_dotenv
+
+import os
 from src.models.produto import Produto
 from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
 from src.models.fornecedor import Fornecedor
 from src.models.transacao import Transacao
 
-
+load_dotenv()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-db_url = "sqlite:///meu_banco.db"
-config.set_main_option("sqlalchemy.url",db_url)
+db_url = os.getenv("DATABASE_URL")
+config.set_main_option("sqlalchemy.url", db_url)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
