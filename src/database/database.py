@@ -20,6 +20,12 @@ if DATABASE_URL.startswith("sqlite"):
     if not DATABASE_URL.startswith("sqlite+aiosqlite"):
         DATABASE_URL = DATABASE_URL.replace("sqlite", "sqlite+aiosqlite")
     connect_args = {"check_same_thread": False}
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+    DATABASE_URL = DATABASE_URL.split("?")[0]  
+elif DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://")
+    DATABASE_URL = DATABASE_URL.split("?")[0] 
 
 engine = create_async_engine(
     DATABASE_URL,

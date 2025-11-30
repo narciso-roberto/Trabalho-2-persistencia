@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 from database.database import AsyncSessionLocal, create_db_and_tables
 from models.produto import Produto
 from models.fornecedor import Fornecedor
