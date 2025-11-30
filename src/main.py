@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from routers.produto_router import routerProduto
 from routers.fornecedor_router import routerFornecedor
+from routers.transacao_router import router as routerTransacao
 from database.database import create_db_and_tables
 
 tags_metadata = [
@@ -25,3 +26,4 @@ async def on_startup():
 
 app.include_router(routerProduto)
 app.include_router(routerFornecedor)
+app.include_router(routerTransacao)
