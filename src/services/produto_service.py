@@ -10,6 +10,7 @@ from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload
 import logging
 from datetime import datetime
+from fastapi import HTTPException
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
@@ -26,13 +27,15 @@ async def produtoPorId(id: int):
             
             )
             produto = await session.scalar(stmt)
+
             if produto is None:
-                raise 
-            
+                raise HTTPException(404, "Produto não encontrado")
+
             return produto
+        
         except Exception as e:
             await session.rollback()
-            return (f"Error: {e}")
+            raise HTTPException(500, detail=str(e))
 
 
 async def visualizarProdutos(offset: int, limit: int = Query(default=10, le=100)):
@@ -187,12 +190,6 @@ async def ProdutosDataTransacoes(dataInicio: str, dataFim: str, offset: int):
 
 #UTILITARIOS
 
-def thisExist(sessao, id, objeto):
-    obj = sessao.get(objeto, id)
-
-    if obj:
-        return 0
-    return 1
 
 def isIncomplete(obj):
     dados = obj.model_dump()

@@ -14,11 +14,11 @@ async def visualizarProduto(pagina: int, qtd:int):
     return await service.visualizarProdutos(pagina,qtd)
 
 @routerProduto.get("/fornecedoresDeProdutos/{id}")
-async def fornecedoresDeProdutos(id: int, offset: int):
-    return await service.fornecedoresDeProdutos(id, offset)
+async def fornecedoresDeProdutos(id: int, offset: int = 0):
+    return await service.fornecedoresDeProdutos(id, offset) 
 
 @routerProduto.get("/produtosDataTransacoes")
-async def atualizarProduto(dataInicio: str, dataFim: str, offset: int):
+async def atualizarProduto(dataInicio: str, dataFim: str, offset: int = 0):
     return await service.ProdutosDataTransacoes(dataInicio,dataFim,offset)
 
 @routerProduto.post("/cadastrar")
