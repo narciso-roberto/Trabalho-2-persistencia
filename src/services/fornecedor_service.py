@@ -81,7 +81,7 @@ async def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
             return new
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
 
 
 async def atualizarFornecedor(id: int, newData: FornecedorDTO):
@@ -101,7 +101,7 @@ async def atualizarFornecedor(id: int, newData: FornecedorDTO):
             return fornecedor
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
 
 
 async def deletarFornecedor(id: int):
@@ -114,7 +114,7 @@ async def deletarFornecedor(id: int):
             return "Fornecedor deletado com sucesso."
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
 
 
 async def contar_fornecedores():
@@ -131,5 +131,21 @@ async def contar_fornecedores():
                 count = first[0] if isinstance(first, (list, tuple)) else first
 
             return count or 0
-        except Exception as e:
-            return f"Error: {e}"
+        except Exception as error:
+            return f"Error: {error}"
+
+
+async def ordenar_fornecedores_por_nome():
+    async with AsyncSessionLocal() as session:
+        try:
+            query = select(Fornecedor).order_by(Fornecedor.nome)
+            result = await session.exec(query)
+
+            try:
+                fornecedores = result.scalars().all()
+            except AttributeError:
+                fornecedores = result.all()
+
+            return fornecedores
+        except Exception as error:
+            return f"Error: {error}"

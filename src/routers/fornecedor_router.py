@@ -8,6 +8,7 @@ from services.fornecedor_service import (
     deletarFornecedor,
     buscar_fornecedor_por_nome,
     contar_fornecedores,
+    ordenar_fornecedores_por_nome
 )
 
 routerFornecedor = APIRouter(prefix="/fornecedor", tags=["Fornecedor"])
@@ -19,6 +20,10 @@ async def listar_fornecedores(page: int = 1, page_size: int = 10):
 @routerFornecedor.get("/quantidade")
 async def quantidade_fornecedores():
     return await contar_fornecedores()
+
+@routerFornecedor.get("/ordenacao")
+async def ordenacao_fornecedores():
+    return await ordenar_fornecedores_por_nome()
 
 @routerFornecedor.get("/buscar")
 async def buscar_por_nome(nome: str):
