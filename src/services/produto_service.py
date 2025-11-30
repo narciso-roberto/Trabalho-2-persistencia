@@ -25,7 +25,7 @@ async def produtoPorId(id: int):
             return produto
         except Exception as e:
             await session.rollback()
-            return (f"Error: {e}")
+            return (f"Error: {e}.")
 
 
 async def visualizarProdutos(offset: int, limit: int = Query(default=10, le=100)):
