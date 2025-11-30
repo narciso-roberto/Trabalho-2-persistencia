@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel
+from datetime import datetime
 
 class TransacaoFornecedorRespostaDTO(SQLModel):
     fornecedor_id: int | None = None
@@ -14,7 +15,7 @@ class TransacaoProdutoRespostaDTO(SQLModel):
 class TransacaoRespostaDTO(SQLModel):
     transacao_id: int | None = None
     quantidade: int | None = None
-    data_transacao: str | None = None
+    data_transacao: datetime | None = None
     
     produtos: list[TransacaoProdutoRespostaDTO]= []
     fornecedores: list[TransacaoFornecedorRespostaDTO] = []
