@@ -10,6 +10,7 @@ from fastapi import Query
 from sqlalchemy.orm import joinedload, selectinload
 import logging
 from datetime import datetime
+from fastapi import HTTPException
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
@@ -18,14 +19,23 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 async def produtoPorId(id: int):
     async with AsyncSessionLocal() as session:
         try:
-            produto = await session.get(Produto, id)
-            if produto is None:
-                raise 
+            stmt = (
+            select(Produto)
+            .options(selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.fornecedor),
+            selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.transacao) 
+            ).where(Produto.idProd == id)
             
+            )
+            produto = await session.scalar(stmt)
+
+            if produto is None:
+                raise HTTPException(404, "Produto não encontrado")
+
             return produto
+        
         except Exception as e:
             await session.rollback()
-            return (f"Error: {e}")
+            raise HTTPException(500, detail=str(e))
 
 
 async def visualizarProdutos(offset: int, limit: int = Query(default=10, le=100)):
@@ -93,17 +103,26 @@ async def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
             return (f"Error: {e}")
 
 
-async def fornecedoresDeProdutos(id: int):
+async def fornecedoresDeProdutos(id: int, offset: int):
     async with AsyncSessionLocal() as session:
         try:
-            produto_obj_res = await session.exec(
-                select(Produto).where(Produto.idProd == id).options(
-                    joinedload(Produto.transacoesProduto).joinedload(ProdutoTransacaoFornecedor.fornecedor)
+
+            statement = (
+                select(Produto).where(Produto.idProd == id)
+                .limit(100)
+                .offset(offset)
+                .options(
+                    joinedload(Produto.transacoesProduto).
+                    joinedload(ProdutoTransacaoFornecedor.fornecedor),
+                    
                 )
             )
-            produto_obj = produto_obj_res.scalar_one_or_none()
-            if not produto_obj:
-                raise ValueError("O Produto nao existe")
+
+            produto_obj = await session.scalar(statement)
+
+            if produto_obj is None:
+                print(produto_obj)
+                raise ValueError("O Produto nao existe ou nao possui fornecedor")
 
             listaTransacoes = produto_obj.transacoesProduto
 
@@ -119,7 +138,7 @@ async def fornecedoresDeProdutos(id: int):
             return (f"Error: {e}")
 
 
-async def ProdutosDataTransacoes(dataInicio: str, dataFim: str):
+async def ProdutosDataTransacoes(dataInicio: str, dataFim: str, offset: int):
 
     try:
         dataInicioFormated = datetime.strptime(dataInicio, "%d-%m-%Y").strftime("%Y-%m-%d")
@@ -133,6 +152,8 @@ async def ProdutosDataTransacoes(dataInicio: str, dataFim: str):
             statement = (
                 select(Transacao)
                 .where(Transacao.data_transacao >= dataInicioFormated, Transacao.data_transacao <= dataFimFormated)
+                .offset(offset)
+                .limit(100)
                 .options(selectinload(Transacao.itens).joinedload(ProdutoTransacaoFornecedor.produto))
             )
 
@@ -169,12 +190,6 @@ async def ProdutosDataTransacoes(dataInicio: str, dataFim: str):
 
 #UTILITARIOS
 
-def thisExist(sessao, id, objeto):
-    obj = sessao.get(objeto, id)
-
-    if obj:
-        return 0
-    return 1
 
 def isIncomplete(obj):
     dados = obj.model_dump()

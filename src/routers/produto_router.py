@@ -1,11 +1,11 @@
 from fastapi import APIRouter
-from src.dtos.createProdutoDTO import ProdutoDTO
-from src.services import produto_service as service
-from src.models.produto import ProdutoResponse
+from dtos.createProdutoDTO import ProdutoDTO
+from services import produto_service as service
+from models.produto import ProdutoResponse
 
 routerProduto = APIRouter(prefix="/produto", tags=["Produto"])
 
-@routerProduto.get("/ProdutoPorId/{id}")
+@routerProduto.get("/ProdutoPorId/{id}", response_model=ProdutoResponse)
 async def produtoPorId(id:int):
     return await service.produtoPorId(id)
 
@@ -14,12 +14,12 @@ async def visualizarProduto(pagina: int, qtd:int):
     return await service.visualizarProdutos(pagina,qtd)
 
 @routerProduto.get("/fornecedoresDeProdutos/{id}")
-async def fornecedoresDeProdutos(id: int):
-    return await service.fornecedoresDeProdutos(id)
+async def fornecedoresDeProdutos(id: int, offset: int = 0):
+    return await service.fornecedoresDeProdutos(id, offset) 
 
 @routerProduto.get("/produtosDataTransacoes")
-async def atualizarProduto(dataInicio: str, dataFim: str):
-    return await service.ProdutosDataTransacoes(dataInicio,dataFim)
+async def atualizarProduto(dataInicio: str, dataFim: str, offset: int = 0):
+    return await service.ProdutosDataTransacoes(dataInicio,dataFim,offset)
 
 @routerProduto.post("/cadastrar")
 async def cadastrarProduto(novoProduto: ProdutoDTO):
