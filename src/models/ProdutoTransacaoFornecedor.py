@@ -12,8 +12,8 @@ class ProdutoTransacaoFornecedor(SQLModel, table=True):
     
 
 
-from src.models.fornecedor import Fornecedor
-from src.models.transacao import TransacaoResponse
+from models.fornecedor import Fornecedor
+from models.transacao import TransacaoResponse
 
 
 class PTFResponse(SQLModel):

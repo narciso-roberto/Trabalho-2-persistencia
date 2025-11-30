@@ -11,7 +11,7 @@ class Produto(SQLModel, table=True):
 
 
 
-from src.models.ProdutoTransacaoFornecedor import PTFResponse
+from models.ProdutoTransacaoFornecedor import PTFResponse
 
 class ProdutoResponse(SQLModel):
     model_config = {"from_attributes": True}

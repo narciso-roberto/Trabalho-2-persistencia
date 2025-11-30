@@ -6,10 +6,10 @@ from sqlalchemy import pool
 from alembic import context
 
 from sqlmodel import SQLModel
-from src.models.produto import Produto
-from src.models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from src.models.fornecedor import Fornecedor
-from src.models.transacao import Transacao
+from .models.produto import Produto
+from .models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
+from .models.fornecedor import Fornecedor
+from .models.transacao import Transacao
 
 
 
