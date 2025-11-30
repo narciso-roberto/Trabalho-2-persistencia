@@ -1,4 +1,5 @@
 from sqlmodel import select
+from sqlalchemy import func
 from dtos.createFornecedorDTO import FornecedorDTO
 from database.database import AsyncSessionLocal
 from models.fornecedor import Fornecedor
@@ -114,3 +115,21 @@ async def deletarFornecedor(id: int):
         except Exception as error:
             await session.rollback()
             return (f"Error: {error}")
+
+
+async def contar_fornecedores():
+    async with AsyncSessionLocal() as session:
+        try:
+            query = select(func.sum(1)).select_from(Fornecedor)
+            result = await session.exec(query)
+
+            arr = result.all()
+            if not arr:
+                count = 0
+            else:
+                first = arr[0]
+                count = first[0] if isinstance(first, (list, tuple)) else first
+
+            return count or 0
+        except Exception as e:
+            return f"Error: {e}"
