@@ -19,3 +19,8 @@ Implementei o .env com uma única variável de ambiente que pode ser tanto sqlit
 Desenvolvi o código do database.py que funciona no banco de dados informado no .env, funções de create all e também de get session, engine.
 Implementei o uso do create_async_engine, async_sessionmaker e do AsyncSession, também atribuindo async e await no routers e services de Fornecedor e Produtos.
 Criei as docstrings de todos os routers.
+
+
+Kauã
+
+Implementei o CRUD das transações, fiz a correção/criação de migrations do banco de dados, criei DTOs e fiz buscas avançadas, além de contagens/agregações relacionadas às transações
