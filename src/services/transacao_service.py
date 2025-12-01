@@ -120,19 +120,21 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
             
             for item in transacao.itens:
                 resp.produtos.append(TransacaoProdutoRespostaDTO(
-                    produto_id=item.produto.idProd,
-                    mercadoria=item.produto.mercadoria,
-                    categoria=item.produto.categoria,
+                    produto_id=getattr(item.produto, "idProd", None) if item.produto else None,
+                    mercadoria=getattr(item.produto, "mercadoria", None) if item.produto else None,
+                    categoria=getattr(item.produto, "categoria", None) if item.produto else None,
                     valor=item.valor
                 ))
                 
-                resp.valor_total += item.valor * item.quantidade
+                if item.valor and item.quantidade:
+                    resp.valor_total += item.valor * item.quantidade
                 
-                resp.fornecedores.append(TransacaoFornecedorRespostaDTO(
-                    fornecedor_id=item.fornecedor.idForn,
-                    nome=item.fornecedor.nome,
-                    cnpj=item.fornecedor.cnpj
-                ))
+                if item.fornecedor:
+                    resp.fornecedores.append(TransacaoFornecedorRespostaDTO(
+                        fornecedor_id=getattr(item.fornecedor, "idForn", None),
+                        nome=getattr(item.fornecedor, "nome", None),
+                        cnpj=getattr(item.fornecedor, "cnpj", None)
+                    ))
                 
             return resp
         except Exception as e:
@@ -150,14 +152,16 @@ async def criar(transacao: CreateTransacaoDTO) -> str:
             await session.flush()
             
             for item in transacao.itens:
+                p = await session.get(Produto, item.produto_id)
+                
                 p_t_f = ProdutoTransacaoFornecedor(
                     produto_id=item.produto_id,
                     fornecedor_id=item.fornecedor_id,
                     transacao_id=nova_transacao.transacao_id,
                     quantidade=item.quantidade,
+                    valor=p.valor if p else 0.0
                 )
                 
-                p = await session.get(Produto, item.produto_id)
                 p.quantidade += item.quantidade
                 await session.flush()
                 
@@ -189,14 +193,16 @@ async def atualizar(id: int, transacao: UpdateTransacaoDTO) -> str:
                 await session.flush()
                 
                 for item in transacao.itens:
+                    p = await session.get(Produto, item.produto_id)
+                    
                     p_t_f = ProdutoTransacaoFornecedor(
                         produto_id=item.produto_id,
                         fornecedor_id=item.fornecedor_id,
                         transacao_id=id,
                         quantidade=item.quantidade,
+                        valor=p.valor if p else 0.0
                     )
                     
-                    p = await session.get(Produto, item.produto_id)
                     p.quantidade += item.quantidade
                     await session.flush()
                     
