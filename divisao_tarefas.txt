@@ -1,0 +1,21 @@
+Narciso.
+
+Implementei funcionalidades intrínsecas da classe Produto, Como Create, Update, Delete, Read (CRUD) na classe produto.
+Além de funcionalidade de pesquisas avançadas como pesquisas por relacionamento e agregação e pesquisas por data e ano em Produto, também criei suas rotas de acesso.
+
+Criei o modelo do banco de dados, com o alembic e SQLModel e realizei a migração.
+
+Implementei o banco de dados SQlite
+
+Criei a classe de modelos e seus relacionamentos, Como Transacao, Produto, ProdutoTransaçãoFornecedor e Fornecedor
+
+Criei a estrutura do projeto com services, routers, dtos, e models
+
+
+Mateus
+
+Implementei services e routers da classe Fornecedor, com as funções CRUD, leitura por paginação, leitura por id, busca por string, contagem de registros.
+Implementei o .env com uma única variável de ambiente que pode ser tanto sqlite ou postgres (NeonDB).
+Desenvolvi o código do database.py que funciona no banco de dados informado no .env, funções de create all e também de get session, engine.
+Implementei o uso do create_async_engine, async_sessionmaker e do AsyncSession, também atribuindo async e await no routers e services de Fornecedor e Produtos.
+Criei as docstrings de todos os routers.
