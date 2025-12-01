@@ -14,6 +14,8 @@ from dtos.updateTransacaoDTO import UpdateTransacaoDTO
 
 from datetime import datetime
 
+from fastapi import HTTPException
+
 import logging
 
 logging.basicConfig()
@@ -26,7 +28,7 @@ async def resgatarTodas(
     data_final: datetime | None
 ) -> Pagination[TransacaoRespostaDTO] | str:
     if data_inicial and data_final and data_inicial > data_final:
-        return "Data inicial não pode ser maior que a data final."
+        return HTTPException(400, "Data inicial não pode ser maior que a data final.")
     
     async with AsyncSessionLocal() as session:
         try:
@@ -101,7 +103,7 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
             transacao = result.first()
 
             if not transacao:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
 
             resp = TransacaoRespostaDTO(
                 transacao_id=transacao.transacao_id,
@@ -167,7 +169,7 @@ async def atualizar(id: int, transacao: UpdateTransacaoDTO) -> str:
             transacao_existente = await session.get(Transacao, id)
 
             if not transacao_existente:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
             
             if len(transacao.itens) > 0:
                 transacao_existente.quantidade = sum(item.quantidade for item in transacao.itens if item.quantidade)    
@@ -210,7 +212,7 @@ async def deletar(id: int) -> str:
             transacao_existente = await session.get(Transacao, id)
             
             if not transacao_existente:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
             
             statement = delete(Transacao).where(Transacao.transacao_id == id)
             
