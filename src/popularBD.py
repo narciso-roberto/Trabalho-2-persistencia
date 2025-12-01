@@ -6,6 +6,8 @@ from models.fornecedor import Fornecedor
 from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
 from models.transacao import Transacao
 
+from datetime import datetime
+
 
 async def popular_banco():
     # Criar tabelas se não existirem
@@ -48,20 +50,22 @@ async def popular_banco():
 
         session.add_all(produtos)
 
+
+
         # -----------------------
         # TRANSACOES
         # -----------------------
         transacoes = [
-            Transacao(tipo=1, quantidade=50, data_transacao="2025-01-01"),
-            Transacao(tipo=1, quantidade=70, data_transacao="2025-01-02"),
-            Transacao(tipo=0, quantidade=20, data_transacao="2025-01-03"),
-            Transacao(tipo=1, quantidade=40, data_transacao="2025-01-04"),
-            Transacao(tipo=0, quantidade=10, data_transacao="2025-01-05"),
-            Transacao(tipo=1, quantidade=100, data_transacao="2025-01-06"),
-            Transacao(tipo=1, quantidade=60, data_transacao="2025-01-07"),
-            Transacao(tipo=0, quantidade=30, data_transacao="2025-01-08"),
-            Transacao(tipo=1, quantidade=80, data_transacao="2025-01-09"),
-            Transacao(tipo=0, quantidade=25, data_transacao="2025-01-10"),
+            Transacao(tipo=1, quantidade=50, data_transacao=datetime.fromisoformat("2025-01-01")),
+            Transacao(tipo=1, quantidade=70, data_transacao=datetime.fromisoformat("2025-01-02")),
+            Transacao(tipo=0, quantidade=20, data_transacao=datetime.fromisoformat("2025-01-03")),
+            Transacao(tipo=1, quantidade=40, data_transacao=datetime.fromisoformat("2025-01-04")),
+            Transacao(tipo=0, quantidade=10, data_transacao=datetime.fromisoformat("2025-01-05")),
+            Transacao(tipo=1, quantidade=100, data_transacao=datetime.fromisoformat("2025-01-06")),
+            Transacao(tipo=1, quantidade=60, data_transacao=datetime.fromisoformat("2025-01-07")),
+            Transacao(tipo=0, quantidade=30, data_transacao=datetime.fromisoformat("2025-01-08")),
+            Transacao(tipo=1, quantidade=80, data_transacao=datetime.fromisoformat("2025-01-09")),
+            Transacao(tipo=0, quantidade=25, data_transacao=datetime.fromisoformat("2025-01-10")),
         ]
 
         session.add_all(transacoes)
@@ -71,16 +75,16 @@ async def popular_banco():
         # -----------------------
 
         ptf = [
-            ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=1, transacao_id=1),
-            ProdutoTransacaoFornecedor(produto_id=2, fornecedor_id=1, transacao_id=2),
-            ProdutoTransacaoFornecedor(produto_id=3, fornecedor_id=2, transacao_id=3),
-            ProdutoTransacaoFornecedor(produto_id=4, fornecedor_id=2, transacao_id=4),
-            ProdutoTransacaoFornecedor(produto_id=5, fornecedor_id=3, transacao_id=5),
-            ProdutoTransacaoFornecedor(produto_id=6, fornecedor_id=4, transacao_id=6),
-            ProdutoTransacaoFornecedor(produto_id=7, fornecedor_id=5, transacao_id=7),
-            ProdutoTransacaoFornecedor(produto_id=8, fornecedor_id=6, transacao_id=8),
-            ProdutoTransacaoFornecedor(produto_id=9, fornecedor_id=7, transacao_id=9),
-            ProdutoTransacaoFornecedor(produto_id=10, fornecedor_id=8, transacao_id=10),
+            ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=1, transacao_id=1, quantidade=25, valor=20.50),
+            ProdutoTransacaoFornecedor(produto_id=2, fornecedor_id=1, transacao_id=2, quantidade=25, valor=10.0),
+            ProdutoTransacaoFornecedor(produto_id=3, fornecedor_id=2, transacao_id=3, quantidade=25, valor=7.8),
+            ProdutoTransacaoFornecedor(produto_id=4, fornecedor_id=2, transacao_id=4, quantidade=25, valor=6.5),
+            ProdutoTransacaoFornecedor(produto_id=5, fornecedor_id=3, transacao_id=5, quantidade=25, valor=5.2),
+            ProdutoTransacaoFornecedor(produto_id=6, fornecedor_id=4, transacao_id=6, quantidade=25, valor=2.5),
+            ProdutoTransacaoFornecedor(produto_id=7, fornecedor_id=5, transacao_id=7, quantidade=25, valor=3.0),
+            ProdutoTransacaoFornecedor(produto_id=8, fornecedor_id=6, transacao_id=8, quantidade=25, valor=12.0),
+            ProdutoTransacaoFornecedor(produto_id=9, fornecedor_id=7, transacao_id=9, quantidade=25, valor=15.0),
+            ProdutoTransacaoFornecedor(produto_id=10, fornecedor_id=8, transacao_id=10, quantidade=25, valor=2.0),
         ]
 
         session.add_all(ptf)

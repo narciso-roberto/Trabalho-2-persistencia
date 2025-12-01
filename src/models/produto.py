@@ -1,6 +1,8 @@
 from sqlmodel import Field, SQLModel, Relationship
 from typing import List
 
+from .ProdutoTransacaoFornecedor import PTFResponse
+
 class Produto(SQLModel, table=True):
     __tablename__ = "produto"
     idProd: int | None = Field(default=None, primary_key=True)
@@ -9,10 +11,6 @@ class Produto(SQLModel, table=True):
     quantidade: int
     categoria: str
     transacoesProduto: list["ProdutoTransacaoFornecedor"] = Relationship(back_populates="produto")
-
-
-
-from models.ProdutoTransacaoFornecedor import PTFResponse
 
 class ProdutoResponse(SQLModel):
     model_config = {"from_attributes": True}

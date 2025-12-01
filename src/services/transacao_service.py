@@ -14,6 +14,8 @@ from dtos.updateTransacaoDTO import UpdateTransacaoDTO
 
 from datetime import datetime
 
+from fastapi import HTTPException
+
 import logging
 
 logging.basicConfig()
@@ -26,7 +28,7 @@ async def resgatarTodas(
     data_final: datetime | None
 ) -> Pagination[TransacaoRespostaDTO] | str:
     if data_inicial and data_final and data_inicial > data_final:
-        return "Data inicial não pode ser maior que a data final."
+        return HTTPException(400, "Data inicial não pode ser maior que a data final.")
     
     async with AsyncSessionLocal() as session:
         try:
@@ -60,6 +62,7 @@ async def resgatarTodas(
                     transacao_id=t.transacao_id,
                     quantidade=t.quantidade,
                     data_transacao=t.data_transacao,
+                    valor_total=0,
                     produtos=[],
                     fornecedores=[]
                 )
@@ -68,9 +71,12 @@ async def resgatarTodas(
                     transacao.produtos.append(TransacaoProdutoRespostaDTO(
                         produto_id=getattr(item.produto, "idProd", None),
                         mercadoria=getattr(item.produto, "mercadoria", None),
-                        quantidade=getattr(item.produto, "quantidade", None),
                         categoria=getattr(item.produto, "categoria", None),
+                        valor=getattr(item, "valor", None)
                     ))
+                    
+                    transacao.valor_total = item.valor * item.quantidade
+                    
                     transacao.fornecedores.append(TransacaoFornecedorRespostaDTO(
                         fornecedor_id=getattr(item.fornecedor, "idForn", None),
                         nome=getattr(item.fornecedor, "nome", None),
@@ -101,12 +107,13 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
             transacao = result.first()
 
             if not transacao:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
 
             resp = TransacaoRespostaDTO(
                 transacao_id=transacao.transacao_id,
                 quantidade=transacao.quantidade,
                 data_transacao=transacao.data_transacao,
+                valor_total=0,
                 produtos=[],
                 fornecedores=[]
             )
@@ -115,9 +122,11 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
                 resp.produtos.append(TransacaoProdutoRespostaDTO(
                     produto_id=item.produto.idProd,
                     mercadoria=item.produto.mercadoria,
-                    quantidade=item.produto.quantidade,
-                    categoria=item.produto.categoria
+                    categoria=item.produto.categoria,
+                    valor=item.valor
                 ))
+                
+                resp.valor_total += item.valor * item.quantidade
                 
                 resp.fornecedores.append(TransacaoFornecedorRespostaDTO(
                     fornecedor_id=item.fornecedor.idForn,
@@ -167,7 +176,7 @@ async def atualizar(id: int, transacao: UpdateTransacaoDTO) -> str:
             transacao_existente = await session.get(Transacao, id)
 
             if not transacao_existente:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
             
             if len(transacao.itens) > 0:
                 transacao_existente.quantidade = sum(item.quantidade for item in transacao.itens if item.quantidade)    
@@ -210,7 +219,7 @@ async def deletar(id: int) -> str:
             transacao_existente = await session.get(Transacao, id)
             
             if not transacao_existente:
-                return "Transação não encontrada."
+                return HTTPException(404, "Transação não encontrada.")
             
             statement = delete(Transacao).where(Transacao.transacao_id == id)
             
