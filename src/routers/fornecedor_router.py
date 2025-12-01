@@ -111,7 +111,7 @@ async def atualizar_fornecedor(id: int, fornecedor: FornecedorDTO):
         cnpj (int): cnpj da empresa
         nome (str): nome da empresa
         contato (str): telefone do fornecedor
-        endereco (str): Rua/cidade do fornecedor
+        endereco (str): Rua/cidade do fornecedo
 
     Returns:\n
         Fornecedor: resultado da atualização

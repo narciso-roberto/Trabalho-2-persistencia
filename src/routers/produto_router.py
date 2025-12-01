@@ -22,19 +22,19 @@ async def produtoPorId(id: int):
     """
     return await service.produtoPorId(id)
 
-@routerProduto.get("/visualizar/{pagina}/{qtd}")
-async def visualizarProduto(pagina: int, qtd: int):
+@routerProduto.get("/visualizar/{offset}/{qtd}")
+async def visualizarProduto(offset: int, qtd: int):
     """
     Obtém a lista de produtos com paginação.
 
     Args:\n
-        pagina (int): Número da página\n
+        offset (int): Número de produtos ignorados\n
         qtd (int): Quantidade de produtos por página
 
     Returns:\n
         Lista de produtos paginada
     """
-    return await service.visualizarProdutos(pagina, qtd)
+    return await service.visualizarProdutos(offset, qtd)
 
 @routerProduto.get("/fornecedoresDeProdutos/{id}")
 async def fornecedoresDeProdutos(id: int, offset: int = 0):
