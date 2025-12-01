@@ -13,6 +13,10 @@ tags_metadata = [
         "name": "Produto",
         "description": "Operações de gerenciamento de produtos",
     },
+    {
+        "name": "Transação",
+        "description": "Operações de gerenciamento de transações",
+    },
 ]
 
 app = FastAPI(

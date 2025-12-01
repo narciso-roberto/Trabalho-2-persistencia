@@ -1,4 +1,5 @@
 from sqlmodel import select
+from sqlalchemy import func
 from dtos.createFornecedorDTO import FornecedorDTO
 from database.database import AsyncSessionLocal
 from models.fornecedor import Fornecedor
@@ -80,7 +81,7 @@ async def cadastrarFornecedor(novoFornecedor: FornecedorDTO):
             return new
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
 
 
 async def atualizarFornecedor(id: int, newData: FornecedorDTO):
@@ -100,7 +101,7 @@ async def atualizarFornecedor(id: int, newData: FornecedorDTO):
             return fornecedor
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
 
 
 async def deletarFornecedor(id: int):
@@ -113,4 +114,38 @@ async def deletarFornecedor(id: int):
             return "Fornecedor deletado com sucesso."
         except Exception as error:
             await session.rollback()
-            return (f"Error: {error}")
+            return f"Error: {error}"
+
+
+async def contar_fornecedores():
+    async with AsyncSessionLocal() as session:
+        try:
+            query = select(func.sum(1)).select_from(Fornecedor)
+            result = await session.exec(query)
+
+            arr = result.all()
+            if not arr:
+                count = 0
+            else:
+                first = arr[0]
+                count = first[0] if isinstance(first, (list, tuple)) else first
+
+            return count or 0
+        except Exception as error:
+            return f"Error: {error}"
+
+
+async def ordenar_fornecedores_por_nome():
+    async with AsyncSessionLocal() as session:
+        try:
+            query = select(Fornecedor).order_by(Fornecedor.nome)
+            result = await session.exec(query)
+
+            try:
+                fornecedores = result.scalars().all()
+            except AttributeError:
+                fornecedores = result.all()
+
+            return fornecedores
+        except Exception as error:
+            return f"Error: {error}"
