@@ -62,6 +62,7 @@ async def resgatarTodas(
                     transacao_id=t.transacao_id,
                     quantidade=t.quantidade,
                     data_transacao=t.data_transacao,
+                    valor_total=0,
                     produtos=[],
                     fornecedores=[]
                 )
@@ -70,9 +71,12 @@ async def resgatarTodas(
                     transacao.produtos.append(TransacaoProdutoRespostaDTO(
                         produto_id=getattr(item.produto, "idProd", None),
                         mercadoria=getattr(item.produto, "mercadoria", None),
-                        quantidade=getattr(item.produto, "quantidade", None),
                         categoria=getattr(item.produto, "categoria", None),
+                        valor=getattr(item, "valor", None)
                     ))
+                    
+                    transacao.valor_total = item.valor * item.quantidade
+                    
                     transacao.fornecedores.append(TransacaoFornecedorRespostaDTO(
                         fornecedor_id=getattr(item.fornecedor, "idForn", None),
                         nome=getattr(item.fornecedor, "nome", None),
@@ -109,6 +113,7 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
                 transacao_id=transacao.transacao_id,
                 quantidade=transacao.quantidade,
                 data_transacao=transacao.data_transacao,
+                valor_total=0,
                 produtos=[],
                 fornecedores=[]
             )
@@ -117,9 +122,11 @@ async def resgatarUm(id: int) -> TransacaoRespostaDTO | str:
                 resp.produtos.append(TransacaoProdutoRespostaDTO(
                     produto_id=item.produto.idProd,
                     mercadoria=item.produto.mercadoria,
-                    quantidade=item.produto.quantidade,
-                    categoria=item.produto.categoria
+                    categoria=item.produto.categoria,
+                    valor=item.valor
                 ))
+                
+                resp.valor_total += item.valor * item.quantidade
                 
                 resp.fornecedores.append(TransacaoFornecedorRespostaDTO(
                     fornecedor_id=item.fornecedor.idForn,

@@ -9,13 +9,14 @@ class TransacaoFornecedorRespostaDTO(SQLModel):
 class TransacaoProdutoRespostaDTO(SQLModel):
     produto_id: int | None = None
     mercadoria: str | None = None
-    quantidade: int | None = None
     categoria: str | None = None
+    valor: float | None = None
     
 class TransacaoRespostaDTO(SQLModel):
     transacao_id: int | None = None
     quantidade: int | None = None
     data_transacao: datetime | None = None
+    valor_total: float | None = None
     
     produtos: list[TransacaoProdutoRespostaDTO]= []
     fornecedores: list[TransacaoFornecedorRespostaDTO] = []

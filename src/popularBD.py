@@ -75,16 +75,16 @@ async def popular_banco():
         # -----------------------
 
         ptf = [
-            ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=1, transacao_id=1, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=2, fornecedor_id=1, transacao_id=2, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=3, fornecedor_id=2, transacao_id=3, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=4, fornecedor_id=2, transacao_id=4, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=5, fornecedor_id=3, transacao_id=5, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=6, fornecedor_id=4, transacao_id=6, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=7, fornecedor_id=5, transacao_id=7, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=8, fornecedor_id=6, transacao_id=8, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=9, fornecedor_id=7, transacao_id=9, quantidade=25),
-            ProdutoTransacaoFornecedor(produto_id=10, fornecedor_id=8, transacao_id=10, quantidade=25),
+            ProdutoTransacaoFornecedor(produto_id=1, fornecedor_id=1, transacao_id=1, quantidade=25, valor=20.50),
+            ProdutoTransacaoFornecedor(produto_id=2, fornecedor_id=1, transacao_id=2, quantidade=25, valor=10.0),
+            ProdutoTransacaoFornecedor(produto_id=3, fornecedor_id=2, transacao_id=3, quantidade=25, valor=7.8),
+            ProdutoTransacaoFornecedor(produto_id=4, fornecedor_id=2, transacao_id=4, quantidade=25, valor=6.5),
+            ProdutoTransacaoFornecedor(produto_id=5, fornecedor_id=3, transacao_id=5, quantidade=25, valor=5.2),
+            ProdutoTransacaoFornecedor(produto_id=6, fornecedor_id=4, transacao_id=6, quantidade=25, valor=2.5),
+            ProdutoTransacaoFornecedor(produto_id=7, fornecedor_id=5, transacao_id=7, quantidade=25, valor=3.0),
+            ProdutoTransacaoFornecedor(produto_id=8, fornecedor_id=6, transacao_id=8, quantidade=25, valor=12.0),
+            ProdutoTransacaoFornecedor(produto_id=9, fornecedor_id=7, transacao_id=9, quantidade=25, valor=15.0),
+            ProdutoTransacaoFornecedor(produto_id=10, fornecedor_id=8, transacao_id=10, quantidade=25, valor=2.0),
         ]
 
         session.add_all(ptf)
