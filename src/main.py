@@ -22,6 +22,8 @@ tags_metadata = [
 app = FastAPI(
     title="Sistema de Estoque",
     openapi_tags=tags_metadata,
+    description="API para gerenciar fornecedores, produtos e transações.",
+    version="1.0.0",
 )
 
 @app.on_event("startup")
