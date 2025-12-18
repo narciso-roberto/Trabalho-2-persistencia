@@ -1,175 +1,34 @@
-from sqlmodel import select
-from dtos.createProdutoDTO import ProdutoDTO
-from database.database import AsyncSessionLocal
-from models.produto import Produto
-from models.ProdutoTransacaoFornecedor import ProdutoTransacaoFornecedor
-from models.fornecedor import Fornecedor
-from models.transacao import Transacao
-from sqlalchemy import delete, select
-from fastapi import Query
-from sqlalchemy.orm import joinedload, selectinload
-import logging
-from datetime import datetime
-from fastapi import HTTPException
 
-logging.basicConfig()
-logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
+from database.database import collection
+
+async def produtoPorId():
+    result = await collection.find_one({"name": "joao"})
+    print(result)
+    return 1
 
 
-async def produtoPorId(id: int):
-    async with AsyncSessionLocal() as session:
-        try:
-            stmt = (
-            select(Produto)
-            .options(selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.fornecedor),
-            selectinload(Produto.transacoesProduto).selectinload(ProdutoTransacaoFornecedor.transacao) 
-            ).where(Produto.idProd == id)
-            
-            )
-            produto = await session.scalar(stmt)
-
-            if produto is None:
-                raise HTTPException(404, "Produto não encontrado")
-
-            return produto
-        
-        except Exception as e:
-            await session.rollback()
-            raise HTTPException(500, detail=str(e))
+async def visualizarProdutos():
+    print()
 
 
-async def visualizarProdutos(offset: int, limit: int = Query(default=10, le=100)):
-    async with AsyncSessionLocal() as session:
-        try:
-            if offset < 0 or limit < 0:
-                raise ValueError("Valor de limite ou offset invalido.")
-
-            statement = select(Produto).offset(offset).limit(limit)
-            res = await session.exec(statement)
-            return res.scalars().all()
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
+async def cadastrarProduto():
+    print()
 
 
-async def cadastrarProduto(novoProduto: ProdutoDTO):
-    async with AsyncSessionLocal() as session:
-        try:
-            if isIncomplete(novoProduto):
-                raise ValueError("O objeto precisa estar totalmente preenchido.")
-
-            novo = Produto(**novoProduto.model_dump())
-            session.add(novo)
-            await session.commit()
-            await session.refresh(novo)
-            return novo
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
+async def deletarProduto():
+    print()
 
 
-async def deletarProduto(id: int):
-    async with AsyncSessionLocal() as session:
-        try:
-            produtoTransacao = delete(ProdutoTransacaoFornecedor).where(ProdutoTransacaoFornecedor.produto_id == id)
-            await session.exec(produtoTransacao)
-
-            deleteProduto = delete(Produto).where(Produto.idProd == id)
-            await session.exec(deleteProduto)
-
-            await session.commit()
-            return "Produto deletado com sucesso."
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
+async def atualizarProduto():
+    print()
 
 
-async def atualizarProduto(id: int, atualizadoProduto: ProdutoDTO):
-    async with AsyncSessionLocal() as session:
-        try:
-            ProdutoAlvo = await session.get(Produto, id)
-            if ProdutoAlvo is None:
-                return "Produto inexistente"
-
-            dados = atualizadoProduto.model_dump(exclude_unset=True)
-            for campo, valor in dados.items():
-                setattr(ProdutoAlvo, campo, valor)
-            session.add(ProdutoAlvo)
-            await session.commit()
-
-            return "Produto atualizado com sucesso"
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
+async def fornecedoresDeProdutos():
+    print()
 
 
-async def fornecedoresDeProdutos(id: int, offset: int):
-    async with AsyncSessionLocal() as session:
-        try:
-
-            statement = (
-                select(Produto).where(Produto.idProd == id)
-                .limit(100)
-                .offset(offset)
-                .options(
-                    joinedload(Produto.transacoesProduto).
-                    joinedload(ProdutoTransacaoFornecedor.fornecedor),
-                    
-                )
-            )
-
-            produto_obj = await session.scalar(statement)
-
-            if produto_obj is None:
-                print(produto_obj)
-                raise ValueError("O Produto nao existe ou nao possui fornecedor")
-
-            listaTransacoes = produto_obj.transacoesProduto
-
-            listaForn = []
-            for x in listaTransacoes:
-                if x not in listaForn:
-                    listaForn.append(x.fornecedor.nome)
-
-            return listaForn
-
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
-
-
-async def ProdutosDataTransacoes(dataInicio: str, dataFim: str, offset: int):
-
-    try:
-        dataInicioFormated = datetime.strptime(dataInicio, "%d-%m-%Y").strftime("%Y-%m-%d")
-        dataFimFormated = datetime.strptime(dataFim, "%d-%m-%Y").strftime("%Y-%m-%d")
-    except Exception:
-        return (f"Error: Data formatada incorretamente.")
-
-
-    async with AsyncSessionLocal() as session:
-        try:
-            statement = (
-                select(Transacao)
-                .where(Transacao.data_transacao >= dataInicioFormated, Transacao.data_transacao <= dataFimFormated)
-                .offset(offset)
-                .limit(100)
-                .options(selectinload(Transacao.itens).joinedload(ProdutoTransacaoFornecedor.produto))
-            )
-
-            listaTransacoes_res = await session.exec(statement)
-            listaTransacoes = listaTransacoes_res.scalars().all()
-
-            produtos = [
-                {"TransacaoID": transacao.transacao_id, "Mercadoria": item.produto.mercadoria, "qtd": transacao.quantidade}
-                for transacao in listaTransacoes
-                for item in transacao.itens
-            ]
-
-            return produtos
-        except Exception as e:
-            await session.rollback()
-            return (f"Error: {e}")
+async def ProdutosDataTransacoes():
+    print()
 
 
 
@@ -188,15 +47,7 @@ async def ProdutosDataTransacoes(dataInicio: str, dataFim: str, offset: int):
 
 
 
-#UTILITARIOS
 
-
-def isIncomplete(obj):
-    dados = obj.model_dump()
-    for campo, valor in dados.items():
-        if dados[campo] is None:
-            return True
-    return False
 
 
 

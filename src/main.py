@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from routers.produto_router import routerProduto
-from routers.fornecedor_router import routerFornecedor
-from routers.transacao_router import router as routerTransacao
-from database.database import create_db_and_tables
+# from routers.fornecedor_router import routerFornecedor
+# from routers.transacao_router import router as routerTransacao
+
 
 tags_metadata = [
     {
@@ -26,10 +26,8 @@ app = FastAPI(
     version="1.0.0",
 )
 
-@app.on_event("startup")
-async def on_startup():
-    await create_db_and_tables()
+
 
 app.include_router(routerProduto)
-app.include_router(routerFornecedor)
-app.include_router(routerTransacao)
+# app.include_router(routerFornecedor)
+# app.include_router(routerTransacao)

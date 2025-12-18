@@ -10,7 +10,9 @@ dependencies = [
     "asyncpg>=0.31.0",
     "dotenv>=0.9.9",
     "fastapi[standard]>=0.121.2",
+    "motor[srv]>=3.7.1",
     "psycopg2-binary>=2.9.11",
+    "pymongo[srv]>=4.15.5",
     "sqlalchemy>=2.0.44",
     "sqlmodel>=0.0.27",
 ]
